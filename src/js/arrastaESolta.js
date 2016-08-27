@@ -19,8 +19,12 @@
         $('.cartao').removeClass('cartao--drop');
         var idOrigem = e.originalEvent.dataTransfer.getData('id');
         var origem = $('#' + idOrigem);
-        var origemHTML = origem.prop('outerHTML');
         var destino = $(this);
+        var idDestino = destino.attr('id');
+        if (idOrigem === idDestino) {
+          return true;
+        }
+        var origemHTML = origem.prop('outerHTML');
         var destinoHTML = destino.prop('outerHTML');
         destino.prop('outerHTML', origemHTML);
         origem.prop('outerHTML', destinoHTML);
