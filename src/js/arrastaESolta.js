@@ -3,10 +3,10 @@
     $('.mural').on('dragstart', '.cartao', function (e) {
         e.originalEvent.dataTransfer.effectAllowed = 'move';
         e.originalEvent.dataTransfer.setData('id', this.id);
-        $('.opcoesDoCartao', this).hide();
+        $(this).addClass('cartao--drag');
     });
     $('.mural').on('dragend', '.cartao', function () {
-      $('.opcoesDoCartao', this).show();
+      $(this).removeClass('cartao--drag');
     });
     $('.mural').on('dragenter', '.cartao,.cartao-conteudo', function () {
       $(this).closest('.cartao').addClass('cartao--drop');
@@ -20,11 +20,11 @@
     });
     $('.mural').on('drop', '.cartao', function (e) {
         e.stopPropagation();
-        $('.cartao').removeClass('cartao--drop');
         var idOrigem = e.originalEvent.dataTransfer.getData('id');
         var origem = $('#' + idOrigem);
-        $('.opcoesDoCartao', origem).show();
+        $(origem).removeClass('cartao--drag');
         var destino = $(this);
+        destino.removeClass('cartao--drop');
         var idDestino = destino.attr('id');
         if (idOrigem === idDestino) {
           return true;
