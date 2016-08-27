@@ -1,14 +1,19 @@
 (function ($) {
     'use strict';
     $('.mural').on('dragstart', '.cartao', function (e) {
+        var cartao = this;
         e.originalEvent.dataTransfer.effectAllowed = 'move';
-        e.originalEvent.dataTransfer.setData('id', this.id);
+        e.originalEvent.dataTransfer.setData('id', cartao.id);
+        $('.opcoesDoCartao', cartao).hide();
+        setTimeout(function () {
+          $('.opcoesDoCartao', cartao).show();
+        }, 0);
     });
-    $('.mural').on('dragenter', '.cartao', function () {
-        $(this).addClass('cartao--drop');
+    $('.mural').on('dragenter', '.cartao,.cartao-conteudo', function () {
+      $(this).closest('.cartao').addClass('cartao--drop');
     });
     $('.mural').on('dragleave', '.cartao', function () {
-        $(this).removeClass('cartao--drop');
+      $(this).closest('.cartao').removeClass('cartao--drop');
     });
     $('.mural').on('dragover', '.cartao', function (e) {
         e.preventDefault();
