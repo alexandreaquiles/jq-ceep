@@ -15,13 +15,14 @@ var controladorDeCartoes = (function ($) {
             radioCor = $("<input>").addClass("opcoesDoCartao-radioCor").val(cor.codigo)
                 .attr({type: "radio", id: idRadioCor, name: "corDoCartao" + idDoCartao});
             labelRadioCor = $("<label>").addClass("opcoesDoCartao-opcao opcoesDoCartao-cor").text(cor.nome).css("color", cor.codigo).attr("for", idRadioCor);
-            opcoesDeCor.append(radioCor).append(labelRadioCor).on('change', '.opcoesDoCartao-radioCor', function () {
-                $(this).closest('.cartao').css('background-color', $(this).val());
-                $(document).trigger('precisaSincronizar');
-            });
+            opcoesDeCor.append(radioCor).append(labelRadioCor);
         });
         return opcoesDeCor;
     }
+    $('.mural').on('change', '.opcoesDoCartao-radioCor', function () {
+        $(this).closest('.cartao').css('background-color', $(this).val());
+        $(document).trigger('precisaSincronizar');
+    });
     function decideTipoCartao(texto) {
         var quebras, textoSemQuebras, letras, palavras, maiorPalavra, tamanhoMaiorPalavra;
         quebras = texto.split('<br>').length - 1;
@@ -43,7 +44,7 @@ var controladorDeCartoes = (function ($) {
             return 'cartao--textoPequeno';
         }
     }
-    function removeCartao() {
+  function removeCartao() {
         var idDoCartao, cartao;
         idDoCartao = $(this).data('cartao');
         cartao = $('#' + idDoCartao).addClass('cartao--some');
