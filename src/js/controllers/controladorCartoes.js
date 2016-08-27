@@ -1,6 +1,18 @@
 var controladorDeCartoes = (function ($) {
     'use strict';
     var numCartoes = $('.cartao').length;
+    $('.mural').on('change', '.opcoesDoCartao-radioCor', function () {
+        $(this).closest('.cartao').css('background-color', $(this).val());
+        $(document).trigger('precisaSincronizar');
+    });
+    $('.mural').on('click', '.opcoesDoCartao-remove', removeCartao);
+    var timer;
+    $('.mural').on('input', '.cartao-conteudo', function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            $(document).trigger('precisaSincronizar');
+        }, 1000);
+    });
     function opcoesDeCoresDoCartao(idDoCartao) {
         var cores, opcoesDeCor;
         cores = [{ nome: "Padrão", codigo: "#EBEF40"},
@@ -19,10 +31,6 @@ var controladorDeCartoes = (function ($) {
         });
         return opcoesDeCor;
     }
-    $('.mural').on('change', '.opcoesDoCartao-radioCor', function () {
-        $(this).closest('.cartao').css('background-color', $(this).val());
-        $(document).trigger('precisaSincronizar');
-    });
     function decideTipoCartao(texto) {
         var quebras, textoSemQuebras, letras, palavras, maiorPalavra, tamanhoMaiorPalavra;
         quebras = texto.split('<br>').length - 1;
@@ -44,7 +52,7 @@ var controladorDeCartoes = (function ($) {
             return 'cartao--textoPequeno';
         }
     }
-  function removeCartao() {
+    function removeCartao() {
         var idDoCartao, cartao;
         idDoCartao = $(this).data('cartao');
         cartao = $('#' + idDoCartao).addClass('cartao--some');
@@ -56,16 +64,9 @@ var controladorDeCartoes = (function ($) {
     function criaCartao(cartao) {
         numCartoes++;
         var tipoCartao = decideTipoCartao(cartao.conteudo);
-        var timer;
-        var novoConteudo = $('<p>').html(cartao.conteudo).addClass('cartao-conteudo').attr('contenteditable', true)
-            .on('input', function () {
-                clearTimeout(timer);
-                timer = setTimeout(function () {
-                    $(document).trigger('precisaSincronizar');
-                }, 1000);
-            });
+        var novoConteudo = $('<p>').html(cartao.conteudo).addClass('cartao-conteudo').attr('contenteditable', true);
         var botaoRemove = $('<button>').addClass('opcoesDoCartao-opcao opcoesDoCartao-remove').text('Remove')
-            .attr('data-cartao', 'cartao_' + numCartoes).click(removeCartao);
+            .attr('data-cartao', 'cartao_' + numCartoes);
         var opcoesDeCores = opcoesDeCoresDoCartao('cartao_' + numCartoes);
         var opcoesDoCartao = $('<div>').addClass('opcoesDoCartao').append(botaoRemove).append(opcoesDeCores);
         var novoCartao = $('<div>').addClass('cartao ' + tipoCartao).append(opcoesDoCartao).append(novoConteudo)
